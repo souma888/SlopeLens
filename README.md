@@ -1,5 +1,18 @@
 # IC202P: Landslide type classifier (ground photos)
 
+## Cloud deployment without a laptop GPU
+
+The Gradio/ZeroGPU edition includes classification, optional size estimation, surveys,
+photo sets, video sampling and JSON reports. See [deployment setup](deploy/zerogpu/SETUP.md).
+Deploy with `python tools/build_zerogpu.py --push YOUR_HF_USERNAME/SlopeLens`, or the manual
+GitHub Actions workflow. It requests only free ZeroGPU hardware and waits for startup.
+Free hosting needs an eligible Hugging Face account (verified, over 30 days old), with
+visitor queues/quotas. The original phone interface remains available below.
+
+**This source checkout lacks the trained heads and dataset.** Restore the original `models/`
+artifacts or retrain from labeled data before deploying; the script fails clearly if missing.
+The ZeroGPU edition has not yet been tested with the original trained artifacts.
+
 **Use case:** a junior engineer standing on a road or in a valley takes a phone photo looking up
 at a slope. The app tells them which landslide type it is (Varnes classification, Hungr et al.
 2014), how confident it is, what to verify on site and what to stay away from. Aerial, satellite,

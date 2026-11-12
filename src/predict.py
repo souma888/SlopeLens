@@ -60,7 +60,7 @@ def resolve_members(model):
 
 
 class Predictor:
-    def __init__(self, model="auto"):
+    def __init__(self, model="auto", device=None):
         from probe import Embedder
         self.members, self.confident_min, expected = resolve_members(model)
         probe_names = [m for m in self.members if m != "cnn"]
@@ -81,7 +81,7 @@ class Predictor:
                                  f"selection expects {want}; retrain it: src/probe.py --backbone {want} --name {name}")
         self.embedders = {b["backbone"]: None for b in self.bundles.values()}
         for bb in self.embedders:
-            self.embedders[bb] = Embedder(bb)
+            self.embedders[bb] = Embedder(bb, device=device)
         self.type_probes, self.gate_probes = probe_names, probe_names_gate
         self.cnn = self._load_cnn() if "cnn" in self.members else None
         self.model_name = " + ".join(self.members)

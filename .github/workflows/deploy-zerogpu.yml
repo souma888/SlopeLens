@@ -1,0 +1,38 @@
+name: Deploy SlopeLens to free ZeroGPU
+on:
+  workflow_dispatch:
+    inputs:
+      space:
+        description: Hugging Face destination (OWNER/SlopeLens)
+        required: true
+      model_repo:
+        description: Trusted HF model repository with trained heads at its root
+        required: true
+      model_revision:
+        description: Immutable 40-character model repository commit SHA
+        required: true
+permissions:
+  contents: read
+concurrency:
+  group: deploy-zerogpu
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests -v
+      - run: python -m pip install huggingface_hub==2.2.0
+      - name: Validate artifacts and deploy to ZeroGPU
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          SPACE: ${{ inputs.space }}
+          MODEL_REPO: ${{ inputs.model_repo }}
+          MODEL_REVISION: ${{ inputs.model_revision }}
+        run: |
+          test -n "$HF_TOKEN" || { echo 'Add HF_TOKEN in repository Actions secrets first.'; exit 1; }
+          python tools/build_zerogpu.py --model-repo "$MODEL_REPO" --model-revision "$MODEL_REVISION" --push "$SPACE"

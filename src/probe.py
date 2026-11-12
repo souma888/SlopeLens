@@ -47,8 +47,9 @@ from phone_aug import phone_like
 
 
 class Embedder:
-    def __init__(self, name, device="cuda"):
-        self.device = device if torch.cuda.is_available() else "cpu"
+    def __init__(self, name, device=None):
+        # An explicit device also supports ZeroGPU's CUDA emulation during startup.
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.proc = AutoImageProcessor.from_pretrained(name)
         self.model = AutoModel.from_pretrained(name).to(self.device).eval()
 
