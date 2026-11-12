@@ -57,6 +57,7 @@ def main():
           "\"Title\" by Author, Licence, source URL (from `data/credits.csv`). "
           "Do not redistribute `data/raw/` without `data/credits.csv`.\n",
           "| Licence | Photos |", "|---|---|", *[f"| {k} | {v} |" for k, v in counts.items()]]
+    RESULTS.mkdir(parents=True, exist_ok=True)
     (RESULTS / "licences.md").write_text("\n".join(md) + "\n", encoding="utf-8")
     print("\n".join(md[:9]))
 

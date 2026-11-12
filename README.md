@@ -1,5 +1,9 @@
 # IC202P: Landslide type classifier (ground photos)
 
+To build a **new** model without the original artifacts, see [fresh model workflow](FRESH_MODEL.md).
+It requires newly collected/reviewed photos, trains new heads, calibrates on validation only,
+and reports new test scores. The historical report below does not describe this new experiment.
+
 ## Cloud deployment without a laptop GPU
 
 The Gradio/ZeroGPU edition includes classification, optional size estimation, surveys,
